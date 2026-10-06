@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4" style="max-width: 600px;">
+
+    <div class="card shadow p-4">
+
+        <h3 class="text-center mb-4">Add Department</h3>
+
+        <form method="POST" action="/add-department">
+            
+            <div class="mb-3">
+                <label class="form-label">Department Name</label>
+                <input type="text" class="form-control" name="deptname" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" name="desc" rows="3"></textarea>
+            </div>
+
+            <button class="btn btn-primary w-100">Save Department</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

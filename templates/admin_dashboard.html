@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mt-3 mb-3">Admin Dashboard</h2>
+
+    <!-- Stats Row -->
+    <div class="row text-center mb-4">
+
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card p-3 bg-primary text-white shadow-sm">
+                <h5>Doctors</h5>
+                <h3>{{ stats.doctor_count }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card p-3 bg-success text-white shadow-sm">
+                <h5>Patients</h5>
+                <h3>{{ stats.patient_count }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card p-3 bg-warning text-dark shadow-sm">
+                <h5>Appointments</h5>
+                <h3>{{ stats.appointment_count }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card p-3 bg-dark text-white shadow-sm">
+                <h5>Departments</h5>
+                <h3>{{ stats.department_count }}</h3>
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <!-- ACTION BUTTONS -->
+    <div class="mb-4">
+        <a href="/add-doctor" class="btn btn-primary me-2">➕ Add Doctor</a>
+        <a href="/add-department-page" class="btn btn-secondary">➕ Add Department</a>
+    </div>
+
+    <hr>
+
+    <!-- Analytics Chart -->
+    <h3 class="mt-4">Analytics Overview</h3>
+
+    <div style="width: 70%; margin: auto;">
+        <canvas id="overviewChart"
+                data-doctors="{{ stats.doctor_count }}"
+                data-patients="{{ stats.patient_count }}"
+                data-appointments="{{ stats.appointment_count }}"
+                data-departments="{{ stats.department_count }}">
+        </canvas>
+    </div>
+
+    <hr>
+
+    <!-- Doctors List -->
+    <h3>Doctors List</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+        </tr>
+
+        {% for d in doctors %}
+        <tr>
+            <td>{{ d.full_name }}</td>
+            <td>{{ d.contact_email }}</td>
+            <td>{{ d.department_link.dept_name if d.department_link else "Not Assigned" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <!-- Patients List -->
+    <h3>Patients List</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+
+        {% for p in patients %}
+        <tr>
+            <td>{{ p.full_name }}</td>
+            <td>{{ p.contact_email }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <!-- Appointments List -->
+    <h3>All Appointments</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+        </tr>
+
+        {% for a in appointments %}
+        <tr>
+            <td>{{ a.patient.full_name }}</td>
+            <td>{{ a.doctor.full_name }}</td>
+            <td>{{ a.visit_date }}</td>
+            <td>{{ a.visit_time }}</td>
+            <td>{{ a.appt_status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <!-- Department Table -->
+    <h3>Departments</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+
+        {% for d in departments %}
+        <tr>
+            <td>{{ d.dept_name }}</td>
+            <td>{{ d.dept_description }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+
+<!-- CHART SCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const el = document.getElementById("overviewChart");
+    if (!el) return;
+
+    const doctors = parseInt(el.dataset.doctors);
+    const patients = parseInt(el.dataset.patients);
+    const appointments = parseInt(el.dataset.appointments);
+    const departments = parseInt(el.dataset.departments);
+
+    new Chart(el, {
+        type: "bar",
+        data: {
+            labels: ["Doctors", "Patients", "Appointments", "Departments"],
+            datasets: [{
+                label: "Hospital Stats",
+                data: [doctors, patients, appointments, departments],
+                backgroundColor: [
+                    "rgba(54, 162, 235, 0.6)",
+                    "rgba(255, 206, 86, 0.6)",
+                    "rgba(75, 192, 192, 0.6)",
+                    "rgba(255, 99, 132, 0.6)"
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false }},
+            scales: { y: { beginAtZero: true }}
+        }
+    });
+
+});
+</script>
+
+{% endblock %}

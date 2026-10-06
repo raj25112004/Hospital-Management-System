@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Complete Appointment</h3>
+
+<form method="POST">
+    <label>Issue Observed</label>
+    <textarea name="symptom_box" required></textarea>
+
+    <label>Medicine Prescribed</label>
+    <textarea name="drug_box" required></textarea>
+
+    <label>Extra Notes</label>
+    <textarea name="note_box"></textarea>
+
+    <button type="submit">Save Report</button>
+</form>
+
+{% endblock %}

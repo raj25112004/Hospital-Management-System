@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">Doctor Dashboard</h2>
+
+    <!-- ======== APPOINTMENT ANALYTICS ======== -->
+    <h4 class="mb-2">Appointment Overview</h4>
+
+    <div style="width: 70%; margin: auto;">
+        <canvas id="doctorChart"
+            data-completed="{{ completed_count }}"
+            data-pending="{{ pending_count }}"
+            data-cancelled="{{ cancelled_count }}">
+        </canvas>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- ======== APPOINTMENT TABLE ======== -->
+    <h4 class="mb-3">Your Appointments</h4>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th>Patient</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Treatment</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for a in appointments %}
+                <tr>
+                    <td>{{ a.patient.full_name }}</td>
+                    <td>{{ a.visit_date }}</td>
+                    <td>{{ a.visit_time }}</td>
+                    <td>
+                        {% if a.appt_status == "Completed" %}
+                            <span class="badge bg-success">Completed</span>
+                        {% elif a.appt_status == "Cancelled" %}
+                            <span class="badge bg-danger">Cancelled</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Booked</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if a.appt_status != "Completed" %}
+                            <form method="POST" action="/complete/{{ a.appt_id }}">
+                                <input class="form-control mb-1" name="issue" placeholder="Diagnosis" required>
+                                <textarea class="form-control mb-1" name="medicine" placeholder="Medicines…" required></textarea>
+                                <textarea class="form-control mb-1" name="note" placeholder="Doctor's Observation…"></textarea>
+                                <button class="btn btn-success btn-sm w-100">Complete Visit</button>
+                            </form>
+                        {% else %}
+                            ✔ Treatment Added
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- ======== DOCTOR CHART SCRIPT ======== -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const el = document.getElementById("doctorChart");
+    if (!el) return;
+
+    const completed = parseInt(el.dataset.completed);
+    const pending = parseInt(el.dataset.pending);
+    const cancelled = parseInt(el.dataset.cancelled);
+
+    new Chart(el, {
+        type: "doughnut",
+        data: {
+            labels: ["Completed", "Pending", "Cancelled"],
+            datasets: [{
+                data: [completed, pending, cancelled],
+                backgroundColor: [
+                    "rgba(75, 192, 192, 0.7)",
+                    "rgba(255, 205, 86, 0.7)",
+                    "rgba(255, 99, 132, 0.7)"
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: "bottom" } }
+        }
+    });
+
+});
+</script>
+
+{% endblock %}

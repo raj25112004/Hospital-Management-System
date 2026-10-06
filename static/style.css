@@ -1,0 +1,115 @@
+/* -----------------------------------------------------------
+   GLOBAL STYLING
+----------------------------------------------------------- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", sans-serif;
+
+    /* Wallpaper Support (Add your image inside /static ) */
+    background: url('/static/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+
+    /* Soft white overlay for readability */
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.70); /* Overlay */
+    backdrop-filter: blur(2px);
+    z-index: -1;
+}
+
+/* -----------------------------------------------------------
+   CARD DESIGN
+----------------------------------------------------------- */
+.card {
+    border-radius: 12px;
+    background: rgba(255,255,255,0.88);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 15px;
+    backdrop-filter: blur(3px);
+}
+
+/* -----------------------------------------------------------
+   TABLE DESIGN
+----------------------------------------------------------- */
+table {
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table th {
+    background: #0d6efd;
+    color: white;
+    font-weight: 600;
+    padding: 12px;
+}
+
+table td {
+    padding: 10px;
+    vertical-align: middle;
+}
+
+/* Hover Effect */
+table tbody tr:hover {
+    background: rgba(0, 98, 255, 0.07);
+}
+
+/* -----------------------------------------------------------
+   BUTTON DESIGN
+----------------------------------------------------------- */
+.btn-custom {
+    background: #0d6efd;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px 16px;
+    box-shadow: 0 3px 8px rgba(13,110,253,0.3);
+    transition: 0.3s;
+}
+
+.btn-custom:hover {
+    background: #084dbf;
+    box-shadow: 0 4px 12px rgba(8,77,191,0.4);
+}
+
+/* Secondary Buttons */
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+}
+.btn-secondary:hover {
+    background: #565e64;
+}
+
+/* -----------------------------------------------------------
+   FORMS
+----------------------------------------------------------- */
+input, select, textarea {
+    border-radius: 8px !important;
+}
+
+/* -----------------------------------------------------------
+   MOBILE RESPONSIVE
+----------------------------------------------------------- */
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+
+    .card {
+        padding: 10px;
+    }
+
+    .btn-custom {
+        width: 100%;
+    }
+}

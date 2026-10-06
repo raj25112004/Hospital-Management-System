@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">Patient Dashboard</h2>
+
+    <a href="/book" class="btn btn-primary mb-3">Book New Appointment</a>
+
+    <!-- ===================== ANALYTICS CHART ===================== -->
+    <h4 class="mt-4">Your Health Overview</h4>
+
+    <div style="width: 70%; margin: auto;">
+        <canvas id="patientChart"
+            data-total="{{ total_visits }}"
+            data-completed="{{ completed_visits }}"
+            data-upcoming="{{ upcoming_visits }}">
+        </canvas>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- ======================== UPCOMING ========================== -->
+    <h4 class="mb-2">Upcoming Appointments</h4>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-warning">
+                <tr>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for v in visits if v.appt_status != "Completed" %}
+                <tr>
+                    <td>{{ v.doctor.full_name }}</td>
+                    <td>{{ v.visit_date }}</td>
+                    <td>{{ v.visit_time }}</td>
+                    <td>
+                        {% if v.appt_status == "Booked" %}
+                            <span class="badge bg-info text-dark">Booked</span>
+                        {% elif v.appt_status == "Cancelled" %}
+                            <span class="badge bg-danger">Cancelled</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ======================== HISTORY ========================== -->
+    <h4 class="mt-4">Past Visits & Treatments</h4>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-secondary">
+                <tr>
+                    <th>Date</th>
+                    <th>Doctor</th>
+                    <th>Diagnosis</th>
+                    <th>Medicine</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for v in visits if v.appt_status == "Completed" %}
+                <tr>
+                    <td>{{ v.visit_date }}</td>
+                    <td>{{ v.doctor.full_name }}</td>
+                    <td>{{ v.care_report.medical_issue }}</td>
+                    <td>{{ v.care_report.medicine_prescribed }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- ===================== PATIENT CHART SCRIPT ===================== -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const el = document.getElementById("patientChart");
+    if (!el) return;
+
+    const total = parseInt(el.dataset.total);
+    const done = parseInt(el.dataset.completed);
+    const future = parseInt(el.dataset.upcoming);
+
+    new Chart(el, {
+        type: "pie",
+        data: {
+            labels: ["Completed Visits", "Upcoming Visits", "Total"],
+            datasets: [{
+                data: [done, future, total],
+                backgroundColor: [
+                    "rgba(75, 192, 192, 0.7)",
+                    "rgba(255, 205, 86, 0.7)",
+                    "rgba(153, 102, 255, 0.7)"
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: "bottom" } }
+        }
+    });
+
+});
+</script>
+
+{% endblock %}

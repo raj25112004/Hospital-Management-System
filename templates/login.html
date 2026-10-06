@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-5 col-lg-4">
+
+        <div class="card shadow-sm p-4">
+
+            <h3 class="text-center mb-3">Sign In</h3>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, msg in messages %}
+                        <div class="alert alert-{{ category }} py-2">{{ msg }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" onsubmit="return validateLogin()">
+
+                <!-- Username -->
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input class="form-control" name="username" placeholder="Enter your username" required>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Enter password" required>
+                </div>
+
+                <button class="btn btn-primary w-100">Login</button>
+
+            </form>
+
+            <div class="text-center mt-3">
+                <small>New user? <a href="/signup">Create an account</a></small>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+function validateLogin(){
+
+    let user = document.querySelector("input[name='username']").value.trim();
+    let pass = document.querySelector("input[name='password']").value.trim();
+
+    if(user.length < 3){
+        alert("Username must be at least 3 characters long.");
+        return false;
+    }
+
+    if(pass.length < 4){
+        alert("Password must be at least 4 characters long.");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+{% endblock %}

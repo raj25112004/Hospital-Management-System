@@ -1,0 +1,27 @@
+<h2>Patient Medical History</h2>
+
+<table border="1" width="100%" cellpadding="8">
+<tr>
+    <th>Date</th>
+    <th>Time</th>
+    <th>Status</th>
+    <th>Diagnosis</th>
+    <th>Medicine</th>
+    <th>Doctor Notes</th>
+</tr>
+
+{% for v in visits %}
+<tr>
+    <td>{{ v.visit_date }}</td>
+    <td>{{ v.visit_time }}</td>
+    <td>{{ v.appt_status }}</td>
+
+    <td>{{ v.care_report.medical_issue if v.care_report else '---' }}</td>
+    <td>{{ v.care_report.medicine_prescribed if v.care_report else '---' }}</td>
+    <td>{{ v.care_report.doctor_observation if v.care_report else '---' }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<br>
+<a href="/doctor-panel">⬅ Back to Dashboard</a>

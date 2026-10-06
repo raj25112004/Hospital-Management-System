@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    body {
+        background: #eef2f7;
+        font-family: "Segoe UI", sans-serif;
+    }
+    .card {
+        border-radius: 15px;
+    }
+    .header {
+        font-weight: 600;
+        font-size: 24px;
+    }
+    label {
+        font-weight: 500;
+    }
+    .btn-book {
+        background: #0066ff;
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+    }
+    .btn-book:hover {
+        background: #004bcc;
+    }
+    .back-link {
+        text-decoration: none;
+        margin-top: 15px;
+        display: inline-block;
+        color: #444;
+    }
+    .back-link:hover {
+        color: #000;
+    }
+</style>
+
+<div class="container mt-5" style="max-width: 600px;">
+
+    <div class="card shadow p-4">
+
+        <div class="header text-center mb-4">📅 Schedule an Appointment</div>
+
+        <!-- FRONTEND VALIDATION SCRIPT -->
+        <script>
+            function validateBooking() {
+
+                let doctor = document.querySelector("select[name='doctor']").value;
+                let date = document.querySelector("input[name='date']").value;
+                let time = document.querySelector("input[name='time']").value;
+
+                if (!doctor) {
+                    alert("Please select a doctor.");
+                    return false;
+                }
+
+                if (!date) {
+                    alert("Please select a date.");
+                    return false;
+                }
+
+                if (!time) {
+                    alert("Please select a time.");
+                    return false;
+                }
+
+                // Prevent past date selection
+                let today = new Date().toISOString().split("T")[0];
+                if (date < today) {
+                    alert("Appointment date cannot be a past date.");
+                    return false;
+                }
+
+                return true;
+            }
+        </script>
+
+        <form method="POST" onsubmit="return validateBooking()">
+
+            <!-- Select Doctor -->
+            <div class="mb-3">
+                <label>Select Doctor</label>
+                <select class="form-select" name="doctor" required>
+                    <option value="">-- Choose a Doctor --</option>
+
+                    {% for d in doctors %}
+                        <option value="{{ d.user_id }}">
+                            {{ d.full_name }}
+                            ({{ d.department_link.dept_name if d.department_link else 'General' }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Date -->
+            <div class="mb-3">
+                <label>Select Date</label>
+                <input type="date" class="form-control" name="date" required>
+            </div>
+
+            <!-- Time -->
+            <div class="mb-3">
+                <label>Select Time</label>
+                <input type="time" class="form-control" name="time" required>
+            </div>
+
+            <button type="submit" class="btn btn-book w-100">Book Appointment</button>
+
+        </form>
+
+        <a href="/patient-panel" class="back-link">← Back to Dashboard</a>
+
+    </div>
+
+</div>
+
+{% endblock %}

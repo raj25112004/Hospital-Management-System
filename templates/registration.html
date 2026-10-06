@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-5 col-lg-4">
+
+        <div class="card shadow-sm p-4">
+
+            <h3 class="text-center mb-3">Patient Registration</h3>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, msg in messages %}
+                        <div class="alert alert-{{ category }} py-2">{{ msg }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" onsubmit="return validateSignup()">
+
+                <!-- Name -->
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input class="form-control" name="username" placeholder="Enter full name" required>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3">
+                    <label class="form-label">Create Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="At least 5 characters" required>
+                </div>
+
+                <button class="btn btn-success w-100">Register</button>
+
+            </form>
+
+            <div class="text-center mt-3">
+                <small>Already have an account? <a href="/signin">Login</a></small>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Signup Validation Script -->
+<script>
+function validateSignup(){
+
+    let name = document.querySelector("input[name='username']").value.trim();
+    let email = document.querySelector("input[name='email']").value.trim();
+    let pass = document.querySelector("input[name='password']").value.trim();
+
+    if(name.length < 3){
+        alert("Name must have at least 3 characters.");
+        return false;
+    }
+
+    // simple email pattern
+    if(!email.includes("@") || !email.includes(".")){
+        alert("Please provide a valid email address.");
+        return false;
+    }
+
+    if(pass.length < 5){
+        alert("Password must contain at least 5 characters.");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+{% endblock %}

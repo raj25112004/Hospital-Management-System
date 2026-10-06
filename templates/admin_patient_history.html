@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient History – Admin View</title>
+</head>
+
+<body>
+
+<h2>Patient Complete Treatment History</h2>
+
+<table border="1" width="100%" cellpadding="8">
+<tr>
+    <th>Date</th>
+    <th>Time</th>
+    <th>Status</th>
+    <th>Doctor</th>
+    <th>Diagnosis</th>
+    <th>Medicines</th>
+    <th>Notes</th>
+</tr>
+
+{% for h in visits %}
+<tr>
+    <td>{{ h.visit_date }}</td>
+    <td>{{ h.visit_time }}</td>
+    <td>{{ h.appt_status }}</td>
+    <td>{{ h.doctor.full_name }}</td>
+    <td>{{ h.care_report.medical_issue if h.care_report else "---" }}</td>
+    <td>{{ h.care_report.medicine_prescribed if h.care_report else "---" }}</td>
+    <td>{{ h.care_report.doctor_observation if h.care_report else "---" }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<br>
+<a href="/admin-panel">⬅ Back</a>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+
+        <div class="card shadow p-4">
+
+            <h3 class="text-center mb-3">Add New Doctor</h3>
+
+            <form method="POST" onsubmit="return validateDoctorForm()">
+
+                <!-- Doctor Name -->
+                <div class="mb-3">
+                    <label class="form-label">Doctor Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="Enter full name" required>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" name="email" class="form-control" placeholder="doctor@example.com" required>
+                </div>
+
+                <!-- Temporary Password -->
+                <div class="mb-3">
+                    <label class="form-label">Temporary Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Min 5 characters" required>
+                </div>
+
+                <!-- Department -->
+                <div class="mb-3">
+                    <label class="form-label">Select Department</label>
+                    <select name="department" class="form-select" required>
+                        <option value="">-- Choose Department --</option>
+
+                        {% for d in departments %}
+                            <option value="{{ d.dept_id }}">{{ d.dept_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn btn-success w-100">Save Doctor</button>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+function validateDoctorForm() {
+    let name = document.querySelector("input[name='name']").value.trim();
+    let email = document.querySelector("input[name='email']").value.trim();
+    let pwd = document.querySelector("input[name='password']").value.trim();
+    let dept = document.querySelector("select[name='department']").value;
+
+    if (name.length < 3) {
+        alert("Doctor name must be at least 3 characters.");
+        return false;
+    }
+
+    if (!email.includes("@") || !email.includes(".")) {
+        alert("Enter a valid email address.");
+        return false;
+    }
+
+    if (pwd.length < 5) {
+        alert("Password must be at least 5 characters long.");
+        return false;
+    }
+
+    if (dept === "") {
+        alert("Please select a department.");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+{% endblock %}

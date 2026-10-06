@@ -1,0 +1,22 @@
+<h2>Results for "{{ keyword }}"</h2>
+
+{% if doctors %}
+<table border="1" width="100%">
+<tr>
+    <th>Name</th>
+    <th>Department</th>
+</tr>
+
+{% for d in doctors %}
+<tr>
+    <td>{{ d.full_name }}</td>
+    <td>{{ d.department_link.dept_name if d.department_link else 'N/A' }}</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No matching doctors found.</p>
+{% endif %}
+
+<br>
+<a href="/patient-panel">Back to Dashboard</a>
